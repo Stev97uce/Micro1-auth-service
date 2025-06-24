@@ -15,12 +15,10 @@ import (
 	"auth-service/controller"
 	"auth-service/middleware"
 	"auth-service/model"
-	"auth-service/repository"
 	"auth-service/service"
 )
 
 func main() {
-
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error cargando .env")
@@ -50,16 +48,14 @@ func main() {
 		port = "8080"
 	}
 	fmt.Println("Servidor iniciado en puerto:", port)
-	userRepo := repository.NewUserRepository(db)
-	authService := service.NewAuthService(userRepo)
+
+	authService := service.NewAuthService(db)
 	authController := controller.NewAuthController(authService)
 
 	router.POST("/register", authController.Register)
-
 	router.POST("/login", func(c *gin.Context) {
 		authController.Login(c, rdb)
 	})
-	router.Run(":" + port)
 
 	router.GET("/protected", middleware.AuthMiddleware(rdb), func(c *gin.Context) {
 		userID, _ := c.Get("user_id")
@@ -68,4 +64,6 @@ func main() {
 			"user_id": userID,
 		})
 	})
+
+	router.Run(":" + port)
 }

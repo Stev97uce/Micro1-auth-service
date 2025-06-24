@@ -17,13 +17,11 @@ func NewRedisClient() *redis.Client {
 		DB:       0,
 	})
 
-	// Test de conexión
 	_, err := rdb.Ping(Ctx).Result()
 	if err != nil {
 		panic("No se pudo conectar a Redis: " + err.Error())
 	}
 
-	// Prueba de escritura
 	err = rdb.Set(Ctx, "auth:ping", "pong", 10*time.Second).Err()
 	if err != nil {
 		panic("Error escribiendo en Redis: " + err.Error())

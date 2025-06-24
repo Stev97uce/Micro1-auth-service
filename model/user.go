@@ -1,10 +1,6 @@
 package model
 
-import (
-	"time"
-
-	"github.com/google/uuid"
-)
+import "github.com/google/uuid"
 
 type User struct {
 	ID           uuid.UUID `gorm:"type:uuid;primaryKey;" json:"id"`
@@ -14,12 +10,6 @@ type User struct {
 	UpdatedAt    int64     `gorm:"autoUpdateTime" json:"updated_at"`
 }
 
-func NewUser(email string, hash string) *User {
-	return &User{
-		ID:           uuid.New(),
-		Email:        email,
-		PasswordHash: hash,
-		CreatedAt:    time.Now().Unix(),
-		UpdatedAt:    time.Now().Unix(),
-	}
+type DeleteUserRequest struct {
+	Email string `json:"email" binding:"required,email"`
 }

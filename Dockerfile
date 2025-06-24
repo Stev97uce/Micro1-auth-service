@@ -1,4 +1,3 @@
-# Etapa de compilación
 FROM golang:1.20 AS builder
 
 WORKDIR /app
@@ -9,9 +8,8 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o main ./cmd/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/main.go
 
-# Etapa de ejecución
 FROM debian:bullseye-slim
 
 WORKDIR /app
