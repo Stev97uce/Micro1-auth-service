@@ -1,9 +1,9 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image for QA
 
 on:
   push:
     branches:
-      - QA
+      - QA 
 
 jobs:
   build-and-push:
@@ -25,7 +25,9 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v6
       with:
-        context: .  
-        file: ./Dockerfile 
+        context: . 
+        file: ./Dockerfile  
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/nombre_imagen:latest
+        tags: stevxd97/auth-service:qa
+        cache-from: type=registry,ref=stevxd97/auth-service:qa
+        cache-to: type=inline
